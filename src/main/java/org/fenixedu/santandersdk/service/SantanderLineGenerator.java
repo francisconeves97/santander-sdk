@@ -5,6 +5,7 @@ import java.nio.charset.CharsetEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -170,7 +171,7 @@ public class SantanderLineGenerator {
 
         String aditionalData = "1"; // TODO
 
-        String cardName = cardNames[0].toUpperCase() + " " + cardNames[1].toUpperCase();
+        String cardName = buildCardName(cardNames);
 
         String email = ""; // TODO
 
@@ -266,6 +267,19 @@ public class SantanderLineGenerator {
         default:
             return "99";
         }
+    }
+
+    private String buildCardName(String[] names) {
+        List<String> namesList = new LinkedList<>(Arrays.asList(names));
+        String lastName = namesList.remove(1);
+        namesList.add(lastName);
+
+        String cardName = String.join(" ", namesList);
+        if (cardName.length() > 40) {
+            return names[0].toUpperCase() + " " + names[1].toUpperCase();
+        }
+
+        return cardName.toUpperCase();
     }
 
     private String[] harvestNames(String name) {
